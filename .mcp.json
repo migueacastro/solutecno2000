@@ -1,0 +1,13 @@
+{
+	"mcpServers": {
+		"supabase": {
+			"command": "/home/miguel/.nvm/versions/node/v25.2.0/bin/npx",
+			"args": [
+				"-y",
+				"@supabase/mcp-server-supabase@latest",
+				"--project-ref",
+				"icfjqeanbxvvrfooymuf"
+			]
+		}
+	}
+}
