@@ -4,7 +4,9 @@ import type { Handle } from '@sveltejs/kit';
 import type { Database } from '$lib/database.types';
 import { getTextDirection } from '$lib/paraglide/runtime';
 import { paraglideMiddleware } from '$lib/paraglide/server';
-import { env } from '$env/dynamic/private';
+// $env/dynamic/public: las PUBLIC_* existen a runtime (y este módulo es el
+// único que las tiene en runtime — dynamic/private las excluye por prefijo).
+import { env } from '$env/dynamic/public';
 
 const handleParaglide: Handle = ({ event, resolve }) =>
 	paraglideMiddleware(event.request, ({ request, locale }) => {
