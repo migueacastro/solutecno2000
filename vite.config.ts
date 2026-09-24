@@ -15,7 +15,9 @@ export default defineConfig({
 				runes: ({ filename }) =>
 					filename.split(/[/\\]/).includes('node_modules') ? undefined : true
 			},
-			adapter: adapter(),
+			// runtime explícito: el Node local (v25) no está en la lista de
+			// adapter-vercel y sin esto el build falla en resolve_runtime.
+			adapter: adapter({ runtime: 'nodejs22.x' }),
 			preprocess: [mdsvex({ extensions: ['.svx', '.md'] })],
 			extensions: ['.svelte', '.svx', '.md'],
 			typescript: {

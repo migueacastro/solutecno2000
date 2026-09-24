@@ -7,6 +7,15 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 		<meta name="text-scale" content="scale" />
+
+		<!-- Modo de tema antes del primer paint (lee la cookie que escribe el
+		     store): evita el flash de los visitantes en oscuro. -->
+		<script>
+			document.documentElement.dataset.mode = /(?:^|; )theme-mode=dark/.test(document.cookie)
+				? 'dark'
+				: 'light';
+		</script>
+
 		%sveltekit.head%
 	</head>
 

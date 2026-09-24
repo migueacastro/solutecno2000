@@ -1,0 +1,71 @@
+/**
+ * Tokens de paleta del panel admin (fuente única de la "marca").
+ *
+ * Cambiar la paleta de la app = editar (o sobreescribir) estos bloques; ningún
+ * componente hardcodea colores. Los nombres son semánticos para que una
+ * re-marca sea tocar hexes, no buscar y reemplazar por todo el código.
+ *
+ * Estos bloques son el DEFAULT en cascada: el servidor inyecta los mismos
+ * bloques con los valores de la DB (tokens_light / tokens_dark del tema
+ * activo de app_settings) en <svelte:head>. Los defaults DEBEN espejar
+ * APP_TOKEN_DEFAULTS y APP_TOKEN_DARK_DEFAULTS en src/lib/config/theme.ts.
+ */
+:root {
+	/* Marca / acento */
+	--app-primary: #005bd3;
+	--app-primary-contrast: #ffffff;
+
+	/* Superficies */
+	--app-bg: #f1f1f1;
+	--app-surface: #ffffff;
+	--app-nav-bg: #ebebeb;
+	--app-active-bg: #e3e3e3;
+	--app-border: #d5d5d5;
+
+	/* Texto */
+	--app-text: #303030;
+	--app-text-muted: #616161;
+
+	/* Tonos semánticos (superficie + texto legible sobre ella) */
+	--app-tone-info-bg: #eaf4ff;
+	--app-tone-info-text: #003a5a;
+	--app-tone-success-bg: #cdfed4;
+	--app-tone-success-text: #014b40;
+	--app-tone-caution-bg: #fff8db;
+	--app-tone-caution-text: #4f4700;
+	--app-tone-warning-bg: #fff1e3;
+	--app-tone-warning-text: #5e4200;
+	--app-tone-critical-bg: #fee8eb;
+	--app-tone-critical-text: #8e0b21;
+}
+
+/* Modo oscuro de fábrica (ex preset 'polaris-noche'). El toggle solo pone
+   data-mode en <html>; estos tokens toman el control. */
+:root[data-mode='dark'] {
+	/* Marca / acento */
+	--app-primary: #1f7aec;
+	--app-primary-contrast: #ffffff;
+
+	/* Superficies */
+	--app-bg: #1a1a1a;
+	--app-surface: #262626;
+	--app-nav-bg: #202020;
+	--app-active-bg: #303030;
+	--app-border: #3d3d3d;
+
+	/* Texto */
+	--app-text: #e3e3e3;
+	--app-text-muted: #a8a8a8;
+
+	/* Tonos semánticos (superficie + texto legible sobre ella) */
+	--app-tone-info-bg: #10273d;
+	--app-tone-info-text: #7cc7ff;
+	--app-tone-success-bg: #0c3327;
+	--app-tone-success-text: #6ff2a9;
+	--app-tone-caution-bg: #332d0c;
+	--app-tone-caution-text: #ffe066;
+	--app-tone-warning-bg: #33220c;
+	--app-tone-warning-text: #ffb267;
+	--app-tone-critical-bg: #33101a;
+	--app-tone-critical-text: #ff7a92;
+}

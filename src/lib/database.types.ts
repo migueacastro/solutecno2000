@@ -39,6 +39,77 @@ export type Database = {
   }
   public: {
     Tables: {
+      app_settings: {
+        Row: {
+          active_theme_id: string
+          app_name: string | null
+          created_at: string
+          favicon_url: string | null
+          id: number
+          logo_url: string | null
+          updated_at: string
+        }
+        Insert: {
+          active_theme_id: string
+          app_name?: string | null
+          created_at?: string
+          favicon_url?: string | null
+          id?: number
+          logo_url?: string | null
+          updated_at?: string
+        }
+        Update: {
+          active_theme_id?: string
+          app_name?: string | null
+          created_at?: string
+          favicon_url?: string | null
+          id?: number
+          logo_url?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "app_settings_active_theme_id_fkey"
+            columns: ["active_theme_id"]
+            isOneToOne: false
+            referencedRelation: "app_themes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      app_themes: {
+        Row: {
+          created_at: string
+          id: string
+          is_preset: boolean
+          name: string
+          slug: string
+          tokens_dark: Json
+          tokens_light: Json
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_preset?: boolean
+          name: string
+          slug: string
+          tokens_dark: Json
+          tokens_light: Json
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_preset?: boolean
+          name?: string
+          slug?: string
+          tokens_dark?: Json
+          tokens_light?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
       categories: {
         Row: {
           created_at: string
@@ -691,6 +762,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      app_theme_mode_valid: { Args: { tokens: Json }; Returns: boolean }
       is_admin: { Args: never; Returns: boolean }
       is_staff: { Args: never; Returns: boolean }
     }

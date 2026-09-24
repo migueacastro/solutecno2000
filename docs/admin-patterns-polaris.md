@@ -150,54 +150,54 @@ Fuente de verdad: `@shopify/polaris-tokens@9.4.2` `dist/css/styles.css` (npm). V
 
 **Superficies y estructura**
 
-| Token | Valor | Rol |
-|---|---|---|
-| `--p-color-bg` | `#F1F1F1` | fondo de la app |
-| `--p-color-bg-surface` | `#FFFFFF` | superficie de card |
-| `--p-color-bg-surface-hover` | `#F7F7F7` | hover de fila |
-| `--p-color-bg-surface-selected` | `#F1F1F1` | fila seleccionada |
-| `--p-color-border` | `#E3E3E3` | borde default |
-| `--p-color-border-hover` | `#CCC` | borde hover |
-| `--p-color-border-secondary` | `#EBEBEB` | divider sutil |
-| `--p-color-border-focus` | `#005BD3` | focus ring |
+| Token                           | Valor     | Rol                |
+| ------------------------------- | --------- | ------------------ |
+| `--p-color-bg`                  | `#F1F1F1` | fondo de la app    |
+| `--p-color-bg-surface`          | `#FFFFFF` | superficie de card |
+| `--p-color-bg-surface-hover`    | `#F7F7F7` | hover de fila      |
+| `--p-color-bg-surface-selected` | `#F1F1F1` | fila seleccionada  |
+| `--p-color-border`              | `#E3E3E3` | borde default      |
+| `--p-color-border-hover`        | `#CCC`    | borde hover        |
+| `--p-color-border-secondary`    | `#EBEBEB` | divider sutil      |
+| `--p-color-border-focus`        | `#005BD3` | focus ring         |
 
 **Superficies semánticas (fondos tintados)**
 
-| Token | Valor |
-|---|---|
-| `--p-color-bg-surface-info` | `#EAF4FF` |
-| `--p-color-bg-surface-success` | `#CDFED4` |
-| `--p-color-bg-surface-caution` | `#FFF8DB` |
-| `--p-color-bg-surface-warning` | `#FFF1E3` |
+| Token                           | Valor     |
+| ------------------------------- | --------- |
+| `--p-color-bg-surface-info`     | `#EAF4FF` |
+| `--p-color-bg-surface-success`  | `#CDFED4` |
+| `--p-color-bg-surface-caution`  | `#FFF8DB` |
+| `--p-color-bg-surface-warning`  | `#FFF1E3` |
 | `--p-color-bg-surface-critical` | `#FEE8EB` |
 | `--p-color-bg-surface-emphasis` | `#F0F2FF` |
-| `--p-color-bg-surface-magic` | `#F8F7FF` |
+| `--p-color-bg-surface-magic`    | `#F8F7FF` |
 
 **Colores de fill (botones/CTA sólidos)**
 
-| Token | Valor |
-|---|---|
+| Token                        | Valor                             |
+| ---------------------------- | --------------------------------- |
 | `--p-color-bg-fill-emphasis` | `#005BD3` — botón primario, links |
-| `--p-color-bg-fill-critical` | `#C70A24` |
-| `--p-color-bg-fill-success` | `#047B5D` |
-| `--p-color-bg-fill-warning` | `#FFB800` |
-| `--p-color-bg-fill-caution` | `#FFE600` |
-| `--p-color-bg-fill-info` | `#91D0FF` |
-| `--p-color-bg-fill-magic` | `#8051FF` |
+| `--p-color-bg-fill-critical` | `#C70A24`                         |
+| `--p-color-bg-fill-success`  | `#047B5D`                         |
+| `--p-color-bg-fill-warning`  | `#FFB800`                         |
+| `--p-color-bg-fill-caution`  | `#FFE600`                         |
+| `--p-color-bg-fill-info`     | `#91D0FF`                         |
+| `--p-color-bg-fill-magic`    | `#8051FF`                         |
 
 **Texto**
 
-| Token | Valor |
-|---|---|
-| `--p-color-text` | `#303030` |
-| `--p-color-text-secondary` | `#616161` |
-| `--p-color-text-disabled` | `#B5B5B5` |
-| `--p-color-text-link` | `#005BD3` |
-| `--p-color-text-critical` | `#8E0B21` (secundario `#C70A24`) |
-| `--p-color-text-success` | `#014B40` (secundario `#047B5D`) |
-| `--p-color-text-warning` | `#5E4200` (secundario `#956F00`) |
-| `--p-color-text-caution` | `#4F4700` (secundario `#827500`) |
-| `--p-color-text-info` | `#003A5A` (secundario `#007CB4`) |
+| Token                      | Valor                            |
+| -------------------------- | -------------------------------- |
+| `--p-color-text`           | `#303030`                        |
+| `--p-color-text-secondary` | `#616161`                        |
+| `--p-color-text-disabled`  | `#B5B5B5`                        |
+| `--p-color-text-link`      | `#005BD3`                        |
+| `--p-color-text-critical`  | `#8E0B21` (secundario `#C70A24`) |
+| `--p-color-text-success`   | `#014B40` (secundario `#047B5D`) |
+| `--p-color-text-warning`   | `#5E4200` (secundario `#956F00`) |
+| `--p-color-text-caution`   | `#4F4700` (secundario `#827500`) |
+| `--p-color-text-info`      | `#003A5A` (secundario `#007CB4`) |
 
 **Bordes/iconos semánticos**: borders critical `#FEC1C7`, success `#92FCAC`, warning `#FFC879`; icons critical `#E22C38`, success `#047B5D`, warning `#B28400`, caution `#998A00`, info `#0094D5`, emphasis `#005BD3`.
 
@@ -217,19 +217,19 @@ Weights: regular **450**, medium **550**, semibold **650**, bold **700**.
 
 Estilos de texto (la capa aplicada):
 
-| Estilo | Tamaño | Weight | Line-height |
-|---|---|---|---|
-| heading-3xl | 36px | bold | 48px |
-| heading-2xl | 30px | bold | 40px |
-| heading-xl | 24px | bold | 32px |
-| heading-lg | 20px | semibold | 28px |
-| heading-md | 14px | semibold | — |
-| heading-sm | 13px | semibold | — |
-| heading-xs | 12px | semibold | — |
-| body-lg | 14px | 450 | 20px |
-| body-md | 13px | 450 | 20px |
-| body-sm | 12px | 450 | 16px |
-| body-xs | 11px | 450 | 12px |
+| Estilo      | Tamaño | Weight   | Line-height |
+| ----------- | ------ | -------- | ----------- |
+| heading-3xl | 36px   | bold     | 48px        |
+| heading-2xl | 30px   | bold     | 40px        |
+| heading-xl  | 24px   | bold     | 32px        |
+| heading-lg  | 20px   | semibold | 28px        |
+| heading-md  | 14px   | semibold | —           |
+| heading-sm  | 13px   | semibold | —           |
+| heading-xs  | 12px   | semibold | —           |
+| body-lg     | 14px   | 450      | 20px        |
+| body-md     | 13px   | 450      | 20px        |
+| body-sm     | 12px   | 450      | 16px        |
+| body-xs     | 11px   | 450      | 12px        |
 
 Overrides de móvil: body-lg→18, body-md→16, body-sm→14, heading-xl→22, heading-2xl→32. Títulos de página = heading-xl/2xl; texto de tabla = body-md (13px); texto subdued/de ayuda = body-sm con `--p-color-text-secondary`.
 
@@ -324,6 +324,34 @@ Los empty states pueden cablearse directo a flujos de creación via Intents API:
 - **Tabla admin**: index pages con saved views por URL, chips de filtro removibles, bulk selection con barra contextual, colapso tabla→lista en móvil.
 - **Productos admin**: página de detalle con grid 2fr/1fr (campos a la izquierda, status/publishing/metadata a la derecha), save bar con dirty tracking, Delete con modal critical.
 - **Feedback**: toasts de success de tres palabras, banners con placement rules, errores inline en forms — nunca autosave.
+
+---
+
+## i18n del admin (paraglide)
+
+Todo el texto del admin pasa por paraglide (`m.*` de `$lib/paraglide/messages.js`), es/en. Reglas:
+
+- **Claves flat con prefijo por área, en inglés**: `admin_nav_*`, `admin_sidebar_*`, `admin_auth_*`, `admin_savebar_*`, `admin_settings_*`, `admin_toast_*`, `admin_errors_*`, `admin_modal_*`. Espejadas en `messages/es.json` y `messages/en.json`; con interpolación `{name}` cuando hace falta. El compilador aplana los puntos a `_` (`toSafeModuleId`), así que las claves se escriben ya aplanadas: `admin_nav_settings`, no `admin.nav.settings`.
+- **Errores de actions = claves, no texto**: el servidor devuelve `fail(status, { errorKey: 'no_session' })` con códigos estables; el cliente los traduce en `src/lib/i18n/errors.ts` (`ERRORS` + `errorMessage()`). El server nunca contiene texto de UI, así que el idioma siempre sale del visitante.
+- **Labels de nav derivados**: los arrays de items usan `$derived` sobre `m.admin_nav_*` para que cambiar de idioma re-renderice el menú sin recargar.
+- **⚠️ Compilar paraglide antes de `pnpm check`**: las claves nuevas no existen hasta correr
+  `rm -rf src/lib/paraglide/messages && npx @inlang/paraglide-js compile --project ./project.inlang --outdir ./src/lib/paraglide`
+
+---
+
+## Primitivas UI (`src/lib/components/ui/`)
+
+Componentes base neutros (los consumen el admin y, más adelante, la zona pública). API en inglés, comentarios en español. Regla dura: **ningún color fuera de los tokens `--app-*`** — ni `bg-white` ni hex; en modo oscuro un hardcode se rompe.
+
+- **`Button.svelte`**: `variant: 'primary' | 'secondary' | 'danger' | 'critical-text'` + `size: 'sm' | 'md'`, `onclick`, `disabled`, `class` passthrough (el caller define el tamaño tipográfico, ej. `class="text-[13px]"`). `danger` para confirms críticos; `critical-text` para acciones destructivas sin relleno ("Quitar").
+- **`IconButton.svelte`**: `shape: 'circle' | 'square'`, `label` (aria-label obligatorio), `onclick`, children = svg.
+- **`Card.svelte`**: superficie `bg-(--app-surface)` + radius 8px + sombra Polaris; `class` passthrough para padding/max-w.
+- **`TextField.svelte`** / **`TextArea.svelte`**: label + input + help + error; `value = $bindable('')`; TextArea agrega `rows` y `mono` (editor JSON).
+- **`FileButton.svelte`**: label-as-button con input file oculto; `onFile(file)`, `busy`/`busyLabel`; resetea `input.value` para re-subir el mismo archivo.
+- **`Badge.svelte`**: `tone: 'info' | 'success' | 'caution' | 'warning' | 'critical' | 'neutral' | 'none'` + `size: 'md' | 'sm'`.
+- **`Icon.svelte`**: `paths` (string SVG de 24px, stroke currentColor), `size`.
+
+El nivel de arriba son compuestos: `components/admin/` (Sidebar, SaveBar, ConfirmModal, Toasts) usan estas primitivas en vez de estilos inline.
 
 ---
 

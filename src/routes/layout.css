@@ -1,7 +1,11 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
-@plugin '@tailwindcss/typography';  
+@plugin '@tailwindcss/typography';
 
-@import '@skeletonlabs/skeleton'; 
-@import '@skeletonlabs/skeleton-svelte'; 
+@import '@skeletonlabs/skeleton';
+@import '@skeletonlabs/skeleton-svelte';
 @import '@skeletonlabs/skeleton/themes/cerberus';
+
+/* Tokens de paleta del admin (marca configurable, ver el archivo). */
+/* Ruta relativa (no $lib): prettier-plugin-tailwindcss no resuelve el alias. */
+@import '../lib/styles/admin-theme.css';

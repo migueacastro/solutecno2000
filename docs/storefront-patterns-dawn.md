@@ -2,7 +2,7 @@
 
 > Estudio verificado contra el código fuente de Dawn v16.0.0 (`main` de [github.com/Shopify/dawn](https://github.com/Shopify/dawn), leído sept. 2026): `settings_schema.json`, `assets/*.css`, `sections/*.liquid`, `snippets/*.liquid`, `templates/product.json`. Números leídos del código, no de blogs.
 
-**Filosofía de diseño declarada en el README de Dawn:** *"HTML-first, JavaScript-only-as-needed"*, *"functional, not pixel-perfect"*. Todo elemento visual (bordes, sombras, radios, animaciones) es un setting cuyo default es **0/ninguno** — por eso Dawn se ve casi brutalista out of the box. La elegancia viene de la tipografía y el spacing, no de la decoración.
+**Filosofía de diseño declarada en el README de Dawn:** _"HTML-first, JavaScript-only-as-needed"_, _"functional, not pixel-perfect"_. Todo elemento visual (bordes, sombras, radios, animaciones) es un setting cuyo default es **0/ninguno** — por eso Dawn se ve casi brutalista out of the box. La elegancia viene de la tipografía y el spacing, no de la decoración.
 
 **Gotcha de unidades:** Dawn define `html { font-size: calc(var(--font-body-scale) * 62.5%) }` ([theme.liquid](https://github.com/Shopify/dawn/blob/main/layout/theme.liquid)) — **1rem = 10px** en todo su CSS. Todos los valores abajo están convertidos a px.
 
@@ -14,11 +14,11 @@ Fuentes: [`sections/main-collection-product-grid.liquid`](https://github.com/Sho
 
 ### Grid
 
-| Breakpoint | Columnas (default) | Rango configurable |
-|---|---|---|
-| Móvil < 750px | **2** | 1–2 |
-| Tablet 750–989px | hereda las columnas móviles | — |
-| Desktop ≥ 990px | **4** | 1–6 |
+| Breakpoint       | Columnas (default)          | Rango configurable |
+| ---------------- | --------------------------- | ------------------ |
+| Móvil < 750px    | **2**                       | 1–2                |
+| Tablet 750–989px | hereda las columnas móviles | —                  |
+| Desktop ≥ 990px  | **4**                       | 1–6                |
 
 - Gap del grid: **8px horizontal y 8px vertical** (rango 4–24px).
 - Productos por página: **16** (rango 8–36, paso 4).
@@ -28,7 +28,7 @@ Fuentes: [`sections/main-collection-product-grid.liquid`](https://github.com/Sho
 ### Anatomía de la product card (arriba → abajo)
 
 1. **Imagen** — dentro de un contenedor con ratio forzado, `object-fit: cover`.
-2. **Badge(s)** — posicionado absoluto sobre la esquina de la imagen; default **bottom-left**; forma pill (`badge_corner_radius: 40px`); *Sale* usa el color scheme 5, *Sold out* el scheme 3. Texto en mayúsculas, tamaño caption.
+2. **Badge(s)** — posicionado absoluto sobre la esquina de la imagen; default **bottom-left**; forma pill (`badge_corner_radius: 40px`); _Sale_ usa el color scheme 5, _Sold out_ el scheme 3. Texto en mayúsculas, tamaño caption.
 3. **Título** — `<h3 class="h5">` = **13px desktop / 12px móvil**.
 4. **Vendor** (apagado por default) — `caption-with-letter-spacing`: mayúsculas, 10px, letter-spacing 0.13rem.
 5. **Precio** — 16px, letter-spacing 0.1rem; prefijo "From" en productos multivariante; en oferta = compare-at tachado + precio de oferta a **18px (más grande que el regular)** ([component-price.css](https://github.com/Shopify/dawn/blob/main/assets/component-price.css)).
@@ -108,20 +108,20 @@ Fuentes: [`config/settings_schema.json`](https://github.com/Shopify/dawn/blob/ma
 
 ### Escala concreta (px, móvil → ≥750px)
 
-| Clase | Tamaño | Line-height |
-|---|---|---|
-| `.hxxl` | clamp(56, 14vw, 72) | 1.1 |
-| `.hxl` | 50 → 62 | ~1.3 |
-| `.h0` | 40 → 52 | ~1.3 |
-| h1 | 30 → **40** | ~1.3 |
-| h2 | 20 → **24** | ~1.3 |
-| h3 | 17 → 18 | ~1.3 |
-| h4 | 15 | ~1.3 |
-| h5 (títulos de card) | 12 → 13 | ~1.3 |
-| **Body** | **15** | **1.8** |
-| `.caption-large` / labels / inputs | 13 | ~1.5 |
-| `.caption` | 10 → 12 | ~1.7 |
-| `.caption-with-letter-spacing` | 10, **MAYÚSCULAS**, ls 0.13rem | ~1.2 |
+| Clase                              | Tamaño                         | Line-height |
+| ---------------------------------- | ------------------------------ | ----------- |
+| `.hxxl`                            | clamp(56, 14vw, 72)            | 1.1         |
+| `.hxl`                             | 50 → 62                        | ~1.3        |
+| `.h0`                              | 40 → 52                        | ~1.3        |
+| h1                                 | 30 → **40**                    | ~1.3        |
+| h2                                 | 20 → **24**                    | ~1.3        |
+| h3                                 | 17 → 18                        | ~1.3        |
+| h4                                 | 15                             | ~1.3        |
+| h5 (títulos de card)               | 12 → 13                        | ~1.3        |
+| **Body**                           | **15**                         | **1.8**     |
+| `.caption-large` / labels / inputs | 13                             | ~1.5        |
+| `.caption`                         | 10 → 12                        | ~1.7        |
+| `.caption-with-letter-spacing`     | 10, **MAYÚSCULAS**, ls 0.13rem | ~1.2        |
 
 - Letter-spacing de headings: 0.06rem × escala (levemente suelto); body 0.06rem.
 - **Ancho de página**: default **1200px** (rango 1000–1600); padding lateral 15px móvil → **50px desktop**; `.page-width--narrow` limita texto a **726px**.
@@ -135,17 +135,17 @@ Fuentes: [`config/settings_schema.json`](https://github.com/Shopify/dawn/blob/ma
 
 Fuentes: directorio `sections/` — defaults de [`featured-collection.liquid`](https://github.com/Shopify/dawn/blob/main/sections/featured-collection.liquid), [`image-banner.liquid`](https://github.com/Shopify/dawn/blob/main/sections/image-banner.liquid), [`image-with-text.liquid`](https://github.com/Shopify/dawn/blob/main/sections/image-with-text.liquid), [`slideshow.liquid`](https://github.com/Shopify/dawn/blob/main/sections/slideshow.liquid), [`newsletter.liquid`](https://github.com/Shopify/dawn/blob/main/sections/newsletter.liquid)
 
-| Sección | Layout default |
-|---|---|
-| **Slideshow (hero)** | Slides full-bleed, altura medium = **340px móvil / 560px desktop** (small 280/420, large 390/720, o adapt a imagen); overlay al 0% default; texto encajonado sobre imagen, centrado; contador (1/3) como pager; autorotación apagada |
-| **Image banner** | Imagen única, caja de texto habilitada, posición **middle-center**, heading h1 |
-| **Featured collection** | Heading h1 + link "View all" a la derecha; 4 productos, 4 col desktop / 2 col móvil; opcional slider horizontal en desktop y **carrusel scroll-snap con peek en móvil (activado por default)**; ratio `adapt` |
-| **Collection list / Collage** | Cards de colecciones — mismo sistema de cards, 3–4 columnas |
-| **Image with text** | 2 columnas: imagen (altura adapt) + bloque de texto, lados alternados (`image_first`), sin overlap, padding 36/36 |
-| **Multicolumn** | 3 columnas con iconos opcionales + texto — el reemplazo usual de **logos / testimonials / valores** |
-| **Rich text** | Bloque de texto centrado y angosto (726px) |
-| **Newsletter / Email signup** | Heading h1 + input de email inline + botón flecha; padding 40/52 |
-| **Featured product / Video / Blog / Contact form / Collage** | Secciones de soporte |
+| Sección                                                      | Layout default                                                                                                                                                                                                                       |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Slideshow (hero)**                                         | Slides full-bleed, altura medium = **340px móvil / 560px desktop** (small 280/420, large 390/720, o adapt a imagen); overlay al 0% default; texto encajonado sobre imagen, centrado; contador (1/3) como pager; autorotación apagada |
+| **Image banner**                                             | Imagen única, caja de texto habilitada, posición **middle-center**, heading h1                                                                                                                                                       |
+| **Featured collection**                                      | Heading h1 + link "View all" a la derecha; 4 productos, 4 col desktop / 2 col móvil; opcional slider horizontal en desktop y **carrusel scroll-snap con peek en móvil (activado por default)**; ratio `adapt`                        |
+| **Collection list / Collage**                                | Cards de colecciones — mismo sistema de cards, 3–4 columnas                                                                                                                                                                          |
+| **Image with text**                                          | 2 columnas: imagen (altura adapt) + bloque de texto, lados alternados (`image_first`), sin overlap, padding 36/36                                                                                                                    |
+| **Multicolumn**                                              | 3 columnas con iconos opcionales + texto — el reemplazo usual de **logos / testimonials / valores**                                                                                                                                  |
+| **Rich text**                                                | Bloque de texto centrado y angosto (726px)                                                                                                                                                                                           |
+| **Newsletter / Email signup**                                | Heading h1 + input de email inline + botón flecha; padding 40/52                                                                                                                                                                     |
+| **Featured product / Video / Blog / Contact form / Collage** | Secciones de soporte                                                                                                                                                                                                                 |
 
 Nota: **Dawn no tiene sección dedicada de testimonials** — los merchants los arman con multicolumn o rich text.
 
