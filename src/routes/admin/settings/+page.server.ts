@@ -282,5 +282,47 @@ export const actions: Actions = {
 		}
 
 		return { resetTokens: { ok: true } };
+	},
+
+	/** Elimina un tema (los presets NO se pueden borrar, ni el activo). */
+	deleteTheme: async ({ request, locals }) => {
+		if (!locals.supabase || !(await locals.safeGetSession())) {
+			return fail(401, { deleteTheme: { errorKey: 'no_session' } });
+		}
+
+		const form = await request.formData();
+		const themeId = String(form.get('themeId') ?? '');
+
+		const { data: theme } = await locals.supabase
+			.from('app_themes')
+			.select('is_preset')
+			.eq('id', themeId)
+			.maybeSingle();
+
+		if (!theme) {
+			return fail(404, { deleteTheme: { errorKey: 'source_theme' } });
+		}
+		if (theme.is_preset) {
+			return fail(400, { deleteTheme: { errorKey: 'delete_preset' } });
+		}
+
+		// El tema activo no se elimina: activar otro primero (el cliente ni
+		// muestra el botón, pero el server es la barrera real).
+		const { data: settings } = await locals.supabase
+			.from('app_settings')
+			.select('active_theme_id')
+			.eq('id', 1)
+			.maybeSingle();
+		if (settings?.active_theme_id === themeId) {
+			return fail(400, { deleteTheme: { errorKey: 'theme_active' } });
+		}
+
+		const { error } = await locals.supabase.from('app_themes').delete().eq('id', themeId);
+
+		if (error) {
+			return fail(500, { deleteTheme: { errorKey: 'delete_theme' } });
+		}
+
+		return { deleteTheme: { ok: true } };
 	}
 };

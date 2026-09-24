@@ -16,6 +16,7 @@ Estudio de patrones UI/UX y de modelo de datos basado en **Shopify** (fuente de 
 | [`storefront-patterns-dawn.md`](storefront-patterns-dawn.md) | Patrones del storefront: grid de catálogo, cards, PDP, header, tipografía, secciones de homepage                | ✅     |
 | [`shopify-data-model.md`](shopify-data-model.md)             | Modelo de datos de Shopify (customers, staff, products, collections, checkout) y esquema PostgreSQL recomendado | ✅     |
 | [`admin-patterns-polaris.md`](admin-patterns-polaris.md)     | Patrones UX del panel admin (Polaris): shell, listas, detalles, formularios, tokens, top-10 a replicar          | ✅     |
+| [`project-architecture.md`](project-architecture.md)         | Cómo está estructurado ESTE proyecto: stack, capas, patrones que seguimos, convenciones, deuda                  | ✅     |
 
 Fuentes: código fuente de Dawn v16 (GitHub), API Admin GraphQL 2026-07 (shopify.dev), Polaris tokens/docs (shopify.dev + `@shopify/polaris-tokens` npm), help.shopify.com. Todo verificado contra fuentes primarias, no blogs.
 

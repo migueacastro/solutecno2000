@@ -10,6 +10,7 @@
 	import { m } from '$lib/paraglide/messages.js';
 	import Sidebar from '$lib/components/admin/Sidebar.svelte';
 	import Toasts from '$lib/components/admin/Toasts.svelte';
+	import ProfileMenu from '$lib/components/admin/ProfileMenu.svelte';
 	import Card from '$lib/components/ui/Card.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
 	import LanguageToggle from '$lib/components/LanguageToggle.svelte';
@@ -163,8 +164,11 @@
 			</div>
 		</main>
 	</div>
-	<!-- Botones flotantes de tema e idioma (los toasts viven abajo-derecha). -->
+	<!-- Botones flotantes de perfil, idioma y tema (los toasts viven abajo-derecha). -->
 	<div class="fixed top-4 right-4 z-30 flex gap-2">
+		{#if data.profile}
+			<ProfileMenu profile={data.profile} />
+		{/if}
 		<LanguageToggle />
 		<ThemeToggle />
 	</div>

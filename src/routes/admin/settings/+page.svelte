@@ -6,6 +6,7 @@
 	import { toasts } from '$lib/stores/toast.svelte';
 	import SaveBar from '$lib/components/admin/SaveBar.svelte';
 	import ConfirmModal from '$lib/components/admin/ConfirmModal.svelte';
+	import ThemePreview from '$lib/components/admin/ThemePreview.svelte';
 	import Card from '$lib/components/ui/Card.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
 	import TextField from '$lib/components/ui/TextField.svelte';
@@ -126,6 +127,15 @@
 	const lightDraft = $derived.by(() => draftState(lightText, false));
 	const darkDraft = $derived.by(() => draftState(darkText, true));
 
+	// Sets completos para la vista previa: con borrador válido se refleja el
+	// JSON (incluso parcial, completado con defaults); inválido, defaults.
+	const lightPreview = $derived(
+		completeTokens(lightDraft.valid ? (lightDraft.parsed as AppThemeTokens) : null, false)
+	);
+	const darkPreview = $derived(
+		completeTokens(darkDraft.valid ? (darkDraft.parsed as AppThemeTokens) : null, true)
+	);
+
 	const tokensDirty = $derived(
 		!!selectedTheme &&
 			(lightDraft.canonic !== JSON.stringify(completeTokens(selectedTheme.tokens_light, false)) ||
@@ -241,6 +251,30 @@
 		}
 	}
 
+	// ── Eliminar (solo temas no preset; modal de confirmación) ────────────
+
+	let deleteModalOpen = $state(false);
+	let deleting = $state(false);
+
+	async function confirmDelete(): Promise<void> {
+		if (!selectedTheme) return;
+		deleting = true;
+		try {
+			const response = await callAction('deleteTheme', { themeId: selectedTheme.id });
+			if (!response.ok) {
+				toasts.push('critical', response.error ?? m.admin_errors_delete_theme());
+				return;
+			}
+			await invalidateAll();
+			// null: el derived cae al tema activo (o al primero).
+			selectedThemeId = null;
+			toasts.push('success', m.admin_toast_deleted());
+		} finally {
+			deleting = false;
+			deleteModalOpen = false;
+		}
+	}
+
 	// ── Reset (modal de confirmación) ──────────────────────────────────────
 
 	let resetModalOpen = $state(false);
@@ -330,9 +364,10 @@
 				class="max-w-sm"
 			/>
 
-			<div class="flex flex-col gap-4 sm:flex-row">
+			<!-- Logo y favicon, uno al lado del otro; apilan en móvil. -->
+			<div class="flex flex-col gap-5 sm:flex-row sm:gap-4">
 				<!-- Logo -->
-				<div class="flex-1">
+				<div class="min-w-0 flex-1">
 					<p class="text-[13px] font-medium text-(--app-text)">{m.admin_settings_logo()}</p>
 					<div class="mt-2 flex items-center gap-3">
 						{#if data.settings?.logo_url}
@@ -372,7 +407,7 @@
 				</div>
 
 				<!-- Favicon -->
-				<div class="flex-1">
+				<div class="min-w-0 flex-1">
 					<p class="text-[13px] font-medium text-(--app-text)">{m.admin_settings_favicon()}</p>
 					<div class="mt-2 flex items-center gap-3">
 						{#if data.settings?.favicon_url}
@@ -423,10 +458,11 @@
 			{m.admin_settings_theme_subtitle()}
 		</p>
 
-		<!-- Lista de temas con swatches (del modo claro) -->
-		<ul class="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+		<!-- Lista de temas con swatches (del modo claro). Flex-wrap en vez de
+			grid: 1/2/3 columnas según ancho, sin saltos de breakpoint. -->
+		<ul class="mt-4 flex flex-wrap gap-2">
 			{#each themes as theme (theme.id)}
-				<li>
+				<li class="w-full min-w-0 sm:w-[calc(50%-0.25rem)] lg:w-[calc(33.333%-0.334rem)]">
 					<button
 						type="button"
 						class="w-full cursor-pointer rounded border p-3 text-left transition-colors {theme.id ===
@@ -489,6 +525,16 @@
 						>
 							{m.admin_settings_reset()}
 						</Button>
+						{#if !selectedTheme.is_preset && selectedTheme.id !== activeThemeId}
+							<Button
+								variant="secondary"
+								size="sm"
+								onclick={() => (deleteModalOpen = true)}
+								disabled={saving}
+							>
+								{m.admin_settings_delete()}
+							</Button>
+						{/if}
 						<Button
 							variant="primary"
 							size="sm"
@@ -502,27 +548,39 @@
 					</div>
 				</div>
 
-				<!-- Modo claro -->
-				<TextArea
-					id="tokens-light"
-					label={m.admin_settings_mode_light()}
-					bind:value={lightText}
-					rows={12}
-					mono
-					error={lightError}
-					class="mt-4 max-w-xl"
-				/>
+				<!-- Modo claro: editor + vista previa de colores al lado -->
+				<div class="mt-4 flex flex-col gap-4 xl:flex-row xl:items-start">
+					<div class="min-w-0 flex-1 xl:max-w-xl">
+						<TextArea
+							id="tokens-light"
+							label={m.admin_settings_mode_light()}
+							bind:value={lightText}
+							rows={12}
+							mono
+							error={lightError}
+						/>
+					</div>
+					<div class="w-full shrink-0 xl:w-72">
+						<ThemePreview tokens={lightPreview} dimmed={!lightDraft.valid} />
+					</div>
+				</div>
 
 				<!-- Modo oscuro -->
-				<TextArea
-					id="tokens-dark"
-					label={m.admin_settings_mode_dark()}
-					bind:value={darkText}
-					rows={12}
-					mono
-					error={darkError}
-					class="mt-4 max-w-xl"
-				/>
+				<div class="mt-4 flex flex-col gap-4 xl:flex-row xl:items-start">
+					<div class="min-w-0 flex-1 xl:max-w-xl">
+						<TextArea
+							id="tokens-dark"
+							label={m.admin_settings_mode_dark()}
+							bind:value={darkText}
+							rows={12}
+							mono
+							error={darkError}
+						/>
+					</div>
+					<div class="w-full shrink-0 xl:w-72">
+						<ThemePreview tokens={darkPreview} dimmed={!darkDraft.valid} />
+					</div>
+				</div>
 			</div>
 		{/if}
 	</Card>
@@ -539,4 +597,15 @@
 	busy={resetting}
 	onConfirm={confirmReset}
 	onCancel={() => (resetModalOpen = false)}
+/>
+
+<ConfirmModal
+	open={deleteModalOpen}
+	title={m.admin_settings_delete_title({ name: selectedTheme?.name ?? '' })}
+	text={m.admin_settings_delete_text({ name: selectedTheme?.name ?? '' })}
+	confirmText={m.admin_settings_delete()}
+	critical
+	busy={deleting}
+	onConfirm={confirmDelete}
+	onCancel={() => (deleteModalOpen = false)}
 />
