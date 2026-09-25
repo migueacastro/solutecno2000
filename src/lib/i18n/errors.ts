@@ -28,7 +28,28 @@ export const ERRORS: Record<string, () => string> = {
 	upload_file: () => m.admin_errors_upload_file(),
 	assign_file: () => m.admin_errors_assign_file(),
 	remove_file: () => m.admin_errors_remove_file(),
-	reset: () => m.admin_errors_reset()
+	reset: () => m.admin_errors_reset(),
+	name_required: () => m.admin_errors_name_required(),
+	slug_invalid: () => m.admin_errors_slug_invalid(),
+	slug_conflict: () => m.admin_errors_slug_conflict(),
+	price_invalid: () => m.admin_errors_price_invalid(),
+	currency_invalid: () => m.admin_errors_currency_invalid(),
+	product_not_found: () => m.admin_errors_product_not_found(),
+	create_product: () => m.admin_errors_create_product(),
+	update_product: () => m.admin_errors_update_product(),
+	delete_product: () => m.admin_errors_delete_product(),
+	fx_cooldown: () => m.admin_errors_fx_cooldown(),
+	fx_no_key: () => m.admin_errors_fx_no_key(),
+	fx_key_invalid: () => m.admin_errors_fx_key_invalid(),
+	fx_auth: () => m.admin_errors_fx_auth(),
+	fx_quota: () => m.admin_errors_fx_quota(),
+	fx_rate_limited: () => m.admin_errors_fx_rate_limited(),
+	fx_unreachable: () => m.admin_errors_fx_unreachable(),
+	fx_bad_payload: () => m.admin_errors_fx_bad_payload(),
+	fx_no_provider: () => m.admin_errors_fx_no_provider(),
+	fx_provider_not_found: () => m.admin_errors_fx_provider_not_found(),
+	fx_provider_disabled: () => m.admin_errors_fx_provider_disabled(),
+	fx_save: () => m.admin_errors_fx_save()
 };
 
 /** Traduce una clave de error (o cae al genérico si es desconocida). */

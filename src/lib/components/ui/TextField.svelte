@@ -15,6 +15,8 @@
 		disabled = false,
 		placeholder,
 		maxlength,
+		oninput,
+		onblur,
 		class: cls = ''
 	}: {
 		id: string;
@@ -26,6 +28,10 @@
 		disabled?: boolean;
 		placeholder?: string;
 		maxlength?: number;
+		/** Passthrough de eventos (ej: marcar slug editado a mano). */
+		oninput?: (event: Event) => void;
+		/** Passthrough de eventos (ej: autogenerar slug al salir del nombre). */
+		onblur?: (event: FocusEvent) => void;
 		class?: string;
 	} = $props();
 </script>
@@ -38,6 +44,8 @@
 		{disabled}
 		{placeholder}
 		{maxlength}
+		{oninput}
+		{onblur}
 		bind:value
 		aria-invalid={error ? 'true' : undefined}
 		class="mt-1 w-full cursor-text rounded border border-(--app-border) bg-(--app-bg) px-3 py-2 text-[14px] text-(--app-text) outline-none focus:border-(--app-primary) {cls}"

@@ -334,6 +334,297 @@ export type Database = {
           },
         ]
       }
+      fx_currencies: {
+        Row: {
+          code: string
+          created_at: string
+          name: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          name: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          name?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      fx_markets: {
+        Row: {
+          created_at: string
+          kind: string
+          name: string
+          slug: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          kind: string
+          name: string
+          slug: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          kind?: string
+          name?: string
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      fx_provider_keys: {
+        Row: {
+          api_key: string
+          created_at: string
+          provider_id: string
+          updated_at: string
+        }
+        Insert: {
+          api_key: string
+          created_at?: string
+          provider_id: string
+          updated_at?: string
+        }
+        Update: {
+          api_key?: string
+          created_at?: string
+          provider_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fx_provider_keys_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: true
+            referencedRelation: "fx_providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fx_providers: {
+        Row: {
+          base_url: string
+          created_at: string
+          enabled: boolean
+          id: string
+          is_primary: boolean
+          last_error: string | null
+          last_status: string
+          last_synced_at: string | null
+          name: string
+          priority: number
+          syncing_since: string | null
+          ttl_minutes: number
+          updated_at: string
+        }
+        Insert: {
+          base_url: string
+          created_at?: string
+          enabled?: boolean
+          id: string
+          is_primary?: boolean
+          last_error?: string | null
+          last_status?: string
+          last_synced_at?: string | null
+          name: string
+          priority?: number
+          syncing_since?: string | null
+          ttl_minutes?: number
+          updated_at?: string
+        }
+        Update: {
+          base_url?: string
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          is_primary?: boolean
+          last_error?: string | null
+          last_status?: string
+          last_synced_at?: string | null
+          name?: string
+          priority?: number
+          syncing_since?: string | null
+          ttl_minutes?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      fx_rate_history: {
+        Row: {
+          api_date: string | null
+          base_currency: string
+          change_percentage: number | null
+          created_at: string
+          fetched_at: string
+          id: number
+          market_slug: string
+          previous_rate: number | null
+          provider_id: string
+          quote_currency: string
+          rate: number
+          trade_type: string
+        }
+        Insert: {
+          api_date?: string | null
+          base_currency: string
+          change_percentage?: number | null
+          created_at?: string
+          fetched_at?: string
+          id?: never
+          market_slug: string
+          previous_rate?: number | null
+          provider_id: string
+          quote_currency: string
+          rate: number
+          trade_type: string
+        }
+        Update: {
+          api_date?: string | null
+          base_currency?: string
+          change_percentage?: number | null
+          created_at?: string
+          fetched_at?: string
+          id?: never
+          market_slug?: string
+          previous_rate?: number | null
+          provider_id?: string
+          quote_currency?: string
+          rate?: number
+          trade_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fx_rate_history_base_currency_fkey"
+            columns: ["base_currency"]
+            isOneToOne: false
+            referencedRelation: "fx_currencies"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "fx_rate_history_market_slug_fkey"
+            columns: ["market_slug"]
+            isOneToOne: false
+            referencedRelation: "fx_markets"
+            referencedColumns: ["slug"]
+          },
+          {
+            foreignKeyName: "fx_rate_history_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "fx_providers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fx_rate_history_quote_currency_fkey"
+            columns: ["quote_currency"]
+            isOneToOne: false
+            referencedRelation: "fx_currencies"
+            referencedColumns: ["code"]
+          },
+        ]
+      }
+      fx_rates: {
+        Row: {
+          api_date: string | null
+          api_updated_at: string | null
+          base_currency: string
+          best_rate: boolean
+          change_percentage: number | null
+          created_at: string
+          fetched_at: string
+          id: string
+          market_slug: string
+          previous_date: string | null
+          previous_rate: number | null
+          provider_id: string
+          quote_currency: string
+          rate: number
+          raw: Json | null
+          trade_type: string
+          updated_at: string
+        }
+        Insert: {
+          api_date?: string | null
+          api_updated_at?: string | null
+          base_currency: string
+          best_rate?: boolean
+          change_percentage?: number | null
+          created_at?: string
+          fetched_at?: string
+          id?: string
+          market_slug: string
+          previous_date?: string | null
+          previous_rate?: number | null
+          provider_id: string
+          quote_currency: string
+          rate: number
+          raw?: Json | null
+          trade_type: string
+          updated_at?: string
+        }
+        Update: {
+          api_date?: string | null
+          api_updated_at?: string | null
+          base_currency?: string
+          best_rate?: boolean
+          change_percentage?: number | null
+          created_at?: string
+          fetched_at?: string
+          id?: string
+          market_slug?: string
+          previous_date?: string | null
+          previous_rate?: number | null
+          provider_id?: string
+          quote_currency?: string
+          rate?: number
+          raw?: Json | null
+          trade_type?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fx_rates_base_currency_fkey"
+            columns: ["base_currency"]
+            isOneToOne: false
+            referencedRelation: "fx_currencies"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "fx_rates_market_slug_fkey"
+            columns: ["market_slug"]
+            isOneToOne: false
+            referencedRelation: "fx_markets"
+            referencedColumns: ["slug"]
+          },
+          {
+            foreignKeyName: "fx_rates_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "fx_providers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fx_rates_quote_currency_fkey"
+            columns: ["quote_currency"]
+            isOneToOne: false
+            referencedRelation: "fx_currencies"
+            referencedColumns: ["code"]
+          },
+        ]
+      }
       inquiries: {
         Row: {
           created_at: string
@@ -489,6 +780,88 @@ export type Database = {
           updated_at?: string
           views?: number
           word_count?: number
+        }
+        Relationships: []
+      }
+      price_list_prices: {
+        Row: {
+          created_at: string
+          id: string
+          price: number
+          price_list_id: string
+          product_id: string
+          updated_at: string
+          variant_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          price: number
+          price_list_id: string
+          product_id: string
+          updated_at?: string
+          variant_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          price?: number
+          price_list_id?: string
+          product_id?: string
+          updated_at?: string
+          variant_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "price_list_prices_price_list_id_fkey"
+            columns: ["price_list_id"]
+            isOneToOne: false
+            referencedRelation: "price_lists"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "price_list_prices_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "price_list_prices_variant_id_fkey"
+            columns: ["variant_id"]
+            isOneToOne: false
+            referencedRelation: "product_variants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      price_lists: {
+        Row: {
+          adjustment_percentage: number | null
+          created_at: string
+          currency: string
+          id: string
+          name: string
+          published_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          adjustment_percentage?: number | null
+          created_at?: string
+          currency: string
+          id?: string
+          name: string
+          published_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          adjustment_percentage?: number | null
+          created_at?: string
+          currency?: string
+          id?: string
+          name?: string
+          published_at?: string | null
+          updated_at?: string
         }
         Relationships: []
       }

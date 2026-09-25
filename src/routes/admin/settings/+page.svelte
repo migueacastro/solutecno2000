@@ -14,10 +14,11 @@
 	import FileButton from '$lib/components/ui/FileButton.svelte';
 	import Badge from '$lib/components/ui/Badge.svelte';
 	import SearchBar from '$lib/components/ui/SearchBar.svelte';
+	import FxSection from '$lib/components/admin/FxSection.svelte';
 	import { searchLocal } from '$lib/search';
 	import { settingsSearchItems } from '$lib/search/settings-items';
 	import type { SearchItem, SearchSource } from '$lib/search/types';
-	import { errorMessage } from '$lib/i18n/errors';
+	import { callAction } from '$lib/admin/actions';
 	import {
 		APP_TOKEN_DEFAULTS,
 		APP_TOKEN_DARK_DEFAULTS,
@@ -27,10 +28,10 @@
 	} from '$lib/config/theme';
 
 	/**
-	 * Settings: grupo Brand (nombre, logo, favicon) y grupo Theme (presets +
-	 * clones, editor de tokens JSON con modo claro y oscuro separados). Cada
-	 * grupo usa estado borrador con dirty-tracking; un SaveBar único
-	 * guarda/descarta ambos.
+	 * Settings: grupo Brand (nombre, logo, favicon), grupo Theme (presets +
+	 * clones, editor de tokens JSON con modo claro y oscuro separados) y la
+	 * sección FX (tasas y proveedores, FxSection). Brand/Theme usan estado
+	 * borrador con dirty-tracking; un SaveBar único guarda/descarta ambos.
 	 */
 	let { data }: { data: PageData } = $props();
 
@@ -42,34 +43,6 @@
 		tokens_dark: AppThemeTokens;
 		is_preset: boolean;
 	};
-
-	// ── helpers de acción ──────────────────────────────────────────────────
-
-	type ActionResponse = { ok: boolean; error?: string; newId?: string };
-
-	/** POST a un ?/action y extracción del resultado (sin form ni enhance).
-	 *  El server devuelve claves de error (errorKey); aquí se traducen. */
-	async function callAction(
-		name: string,
-		fields: Record<string, string | File>
-	): Promise<ActionResponse> {
-		const body = new FormData();
-		for (const [key, value] of Object.entries(fields)) body.append(key, value);
-
-		const res = await fetch(`?/${name}`, { method: 'POST', body });
-		if (!res.ok) return { ok: false, error: m.admin_errors_http({ status: res.status }) };
-
-		const action = (await res.json()) as {
-			type: string;
-			data?: Record<string, { errorKey?: string; newId?: string }>;
-		};
-		const result = Object.values(action.data ?? {})[0];
-
-		if (action.type === 'failure') {
-			return { ok: false, error: errorMessage(result?.errorKey) };
-		}
-		return { ok: true, newId: result?.newId };
-	}
 
 	// ── Brand ──────────────────────────────────────────────────────────────
 
@@ -306,8 +279,8 @@
 	// ── Logo / favicon ─────────────────────────────────────────────────────
 
 	// Apertura de cada card expandible (la búsqueda las fuerza a true).
-	let brandOpen = $state(true);
-	let themeOpen = $state(true);
+	let brandOpen = $state(false);
+	let themeOpen = $state(false);
 	let uploadingLogo = $state(false);
 	let uploadingFavicon = $state(false);
 
@@ -640,6 +613,9 @@
 			</div>
 		{/if}
 	</Card>
+
+	<!-- ── Grupo: Tasas de cambio (FX) ── -->
+	<FxSection fx={data.fx} history={data.history ?? []} />
 </div>
 
 <SaveBar {dirty} {saving} onSave={save} onDiscard={discard} />
