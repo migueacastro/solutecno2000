@@ -9,12 +9,10 @@
 	import { resolveAppName } from '$lib/config/theme';
 	import { m } from '$lib/paraglide/messages.js';
 	import Sidebar from '$lib/components/admin/Sidebar.svelte';
+	import AdminTopbar from '$lib/components/admin/AdminTopbar.svelte';
 	import Toasts from '$lib/components/admin/Toasts.svelte';
-	import ProfileMenu from '$lib/components/admin/ProfileMenu.svelte';
 	import Card from '$lib/components/ui/Card.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
-	import LanguageToggle from '$lib/components/LanguageToggle.svelte';
-	import ThemeToggle from '$lib/components/ThemeToggle.svelte';
 
 	/**
 	 * Shell del panel admin con el guard del +layout.ts. Estados en orden:
@@ -150,27 +148,25 @@
 		</Card>
 	</div>
 {:else}
-	<div class="flex min-h-screen bg-(--app-bg) font-[Inter,system-ui,sans-serif] text-(--app-text)">
-		<Sidebar
-			profile={data.profile}
-			appName={brand}
-			logoUrl={data.settings?.logoUrl ?? null}
-			mobileOpen={drawerOpen}
-			onNavigate={() => (drawerOpen = false)}
-		/>
-		<main class="min-w-0 flex-1">
-			<div class="mx-auto max-w-[1200px] px-4 py-6 md:px-8 md:py-8">
-				{@render children()}
-			</div>
-		</main>
-	</div>
-	<!-- Botones flotantes de perfil, idioma y tema (los toasts viven abajo-derecha). -->
-	<div class="fixed top-4 right-4 z-30 flex gap-2">
-		{#if data.profile}
-			<ProfileMenu profile={data.profile} />
-		{/if}
-		<LanguageToggle />
-		<ThemeToggle />
+	<!-- Columna: topbar full-width arriba (cruza sobre la sidebar) + fila sidebar/main. -->
+	<div
+		class="flex min-h-screen flex-col bg-(--app-bg) font-[Inter,system-ui,sans-serif] text-(--app-text)"
+	>
+		<AdminTopbar profile={data.profile} onMenuToggle={() => (drawerOpen = true)} />
+		<div class="flex min-h-0 flex-1">
+			<Sidebar
+				profile={data.profile}
+				appName={brand}
+				logoUrl={data.settings?.logoUrl ?? null}
+				mobileOpen={drawerOpen}
+				onNavigate={() => (drawerOpen = false)}
+			/>
+			<main class="min-w-0 flex-1">
+				<div class="mx-auto max-w-[1200px] px-4 py-6 md:px-8 md:py-8">
+					{@render children()}
+				</div>
+			</main>
+		</div>
 	</div>
 	<Toasts />
 {/if}

@@ -14,6 +14,7 @@
 	<PublicHeader
 		appName={data.settings?.appName ?? undefined}
 		logoUrl={data.settings?.logoUrl ?? null}
+		profile={data.profile}
 	/>
 	<main class="flex-1">
 		{@render children()}

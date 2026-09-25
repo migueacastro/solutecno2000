@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import { untrack } from 'svelte';
+	import { untrack, tick } from 'svelte';
 	import { invalidateAll } from '$app/navigation';
 	import { m } from '$lib/paraglide/messages.js';
 	import { toasts } from '$lib/stores/toast.svelte';
@@ -13,6 +13,10 @@
 	import TextArea from '$lib/components/ui/TextArea.svelte';
 	import FileButton from '$lib/components/ui/FileButton.svelte';
 	import Badge from '$lib/components/ui/Badge.svelte';
+	import SearchBar from '$lib/components/ui/SearchBar.svelte';
+	import { searchLocal } from '$lib/search';
+	import { settingsSearchItems } from '$lib/search/settings-items';
+	import type { SearchItem, SearchSource } from '$lib/search/types';
 	import { errorMessage } from '$lib/i18n/errors';
 	import {
 		APP_TOKEN_DEFAULTS,
@@ -301,6 +305,9 @@
 
 	// ── Logo / favicon ─────────────────────────────────────────────────────
 
+	// Apertura de cada card expandible (la búsqueda las fuerza a true).
+	let brandOpen = $state(true);
+	let themeOpen = $state(true);
 	let uploadingLogo = $state(false);
 	let uploadingFavicon = $state(false);
 
@@ -339,21 +346,68 @@
 			field === 'logo' ? m.admin_toast_logo_removed() : m.admin_toast_favicon_removed()
 		);
 	}
+
+	// ── Búsqueda de ajustes (SearchBar, dropdown + jump) ───────────────────
+
+	// Fuente local: el array se construye en la llamada a search (que solo
+	// ocurre con input del usuario), así los labels salen con el locale vivo
+	// y searchLocal preindiza por referencia de array.
+	const settingsSource: SearchSource = {
+		id: 'local:settings',
+		search: (q) => Promise.resolve(searchLocal(q, settingsSearchItems()))
+	};
+
+	// targetId → card dueña del campo: el jump expande la card ANTES del scroll.
+	const targetCard: Record<string, 'brand' | 'theme'> = {
+		'app-name': 'brand',
+		logo: 'brand',
+		favicon: 'brand',
+		'tokens-light': 'theme',
+		'tokens-dark': 'theme',
+		'card-brand': 'brand',
+		'card-theme': 'theme'
+	};
+
+	async function jumpToSetting(item: SearchItem): Promise<void> {
+		if (!item.targetId) return;
+		const card = targetCard[item.targetId];
+		if (card === 'brand') brandOpen = true;
+		else if (card === 'theme') themeOpen = true;
+		// El {#if expanded} del Card necesita un ciclo para montar el campo.
+		await tick();
+		const el = document.getElementById(item.targetId);
+		el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+		if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
+			el.focus({ preventScroll: true });
+		}
+	}
 </script>
 
 <header class="mb-6">
 	<h1 class="text-[20px] font-semibold text-(--app-text)">{m.admin_settings_title()}</h1>
 	<p class="mt-1 text-[13px] text-(--app-text-muted)">{m.admin_settings_subtitle()}</p>
+	<!-- Buscador de ajustes (JSON local): elegir un resultado expande la card,
+		hace scroll al campo y pone el foco (dropdown + jump). -->
+	<div class="mt-4 max-w-md">
+		<SearchBar
+			sources={[settingsSource]}
+			placeholder={m.admin_search_placeholder()}
+			ariaLabel={m.admin_search_label()}
+			onSelect={jumpToSetting}
+		/>
+	</div>
 </header>
 
 <div class="flex flex-col gap-6">
 	<!-- ── Grupo: Brand ── -->
-	<Card class="p-5">
-		<h2 class="text-[15px] font-semibold text-(--app-text)">{m.admin_settings_brand_title()}</h2>
-		<p class="mt-1 text-[13px] text-(--app-text-muted)">
-			{m.admin_settings_brand_subtitle()}
-		</p>
-
+	<Card
+		id="card-brand"
+		class="p-5"
+		expandable
+		bind:expanded={brandOpen}
+		title={m.admin_settings_brand_title()}
+		subtitle={m.admin_settings_brand_subtitle()}
+	>
 		<div class="mt-4 flex flex-col gap-5">
 			<TextField
 				id="app-name"
@@ -452,12 +506,14 @@
 	</Card>
 
 	<!-- ── Grupo: Theme ── -->
-	<Card class="p-5">
-		<h2 class="text-[15px] font-semibold text-(--app-text)">{m.admin_settings_theme_title()}</h2>
-		<p class="mt-1 text-[13px] text-(--app-text-muted)">
-			{m.admin_settings_theme_subtitle()}
-		</p>
-
+	<Card
+		id="card-theme"
+		class="p-5"
+		expandable
+		bind:expanded={themeOpen}
+		title={m.admin_settings_theme_title()}
+		subtitle={m.admin_settings_theme_subtitle()}
+	>
 		<!-- Lista de temas con swatches (del modo claro). Flex-wrap en vez de
 			grid: 1/2/3 columnas según ancho, sin saltos de breakpoint. -->
 		<ul class="mt-4 flex flex-wrap gap-2">

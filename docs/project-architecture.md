@@ -148,13 +148,41 @@ Las pages con acciones no usan `<form use:enhance>`; usan un helper
 1. Cookie `theme-mode` (leída en el load raíz) → `theme.mode` en el store.
 2. Script inline de `app.html` aplica `data-mode` antes de hidratar (sin flash).
 3. Toggles (`ThemeToggle`/`LanguageToggle`) son componentes reutilizados en
-   público (header) y admin (cluster flotante: perfil, idioma, tema).
+   público (header) y admin (`AdminTopbar`, a la derecha del buscador).
 
 ### 3.8 Estado global
 
 Solo dos stores (`stores/*.svelte.ts`, patrón módulo con estado rune):
 `theme` (modo claro/oscuro) y `toasts` (`push(tone, message)`). Todo lo demás
 es estado local de página con dirty-tracking + `SaveBar` único.
+
+### 3.9 SearchBar reutilizable (`src/lib/search/` + `ui/SearchBar.svelte`)
+
+- **SearchBar** es un combobox ARIA 1.2 (foco siempre en el input,
+  `aria-activedescendant`, teclado en el `onkeydown` del input). Mezcla
+  `SearchSource`s: las locales renderizan al instante y re-fusiona cuando
+  llegan las remotas (locales primero, dedupe por id, corte a `limit`).
+- **Cancelación:** generation counter + AbortController; la respuesta que
+  llega tarde se descarta (`gen !== generation` tras cada await) aunque el
+  abort no la haya cortado a tiempo. Debounce 200ms, `minChars = 2`.
+- **Caché** (`cache.ts`): Map module-level, TTL 60s, máx 30 entradas (LRU
+  con delete+re-set), dedupe de requests en vuelo (`inFlight`). El abort del
+  caller se propaga a la request real vía tercer parámetro.
+- **Trigram en TS** (`trigram.ts`): espejo del convenio pg_trgm (normalización
+  NFD + padding `'  text  '`, similitud Dice = `similarity()` de pg_trgm).
+  `searchLocal` preíndice por referencia del array en un WeakMap.
+- **Items como funciones, nunca module-level:** los labels `m.*()` se
+  resuelven al llamar (`settingsSearchItems()`, `adminNavSearchItems()`);
+  a module-level paraglide congelaría el locale del server (misma regla que
+  §3.3).
+- **Consumidores:** topbar admin (`AdminTopbar`, input centrado con ⌘K y
+  fuente remota de productos) y `/admin/settings` (dropdown + jump: elegir un
+  ajuste expande la Card, hace scroll y pone foco al campo).
+- **RPC remota** (`search_products`, migración 20260923000800): `pg_trgm` +
+  GIN `gin_trgm_ops` en name/vendor/product_type/sku; una sola query
+  (subquery sobre product_variants, sin n+1); **SECURITY INVOKER** (respeta
+  RLS) y `grant execute` solo a `authenticated`. La RPC ya está en
+  `database.types.ts` y la fuente remota la llama tipada.
 
 ## 4. Comandos del día a día
 

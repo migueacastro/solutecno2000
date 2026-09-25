@@ -12,31 +12,6 @@ export type Database = {
   __InternalSupabase: {
     PostgrestVersion: "14.5"
   }
-  graphql_public: {
-    Tables: {
-      [_ in never]: never
-    }
-    Views: {
-      [_ in never]: never
-    }
-    Functions: {
-      graphql: {
-        Args: {
-          extensions?: Json
-          operationName?: string
-          query?: string
-          variables?: Json
-        }
-        Returns: Json
-      }
-    }
-    Enums: {
-      [_ in never]: never
-    }
-    CompositeTypes: {
-      [_ in never]: never
-    }
-  }
   public: {
     Tables: {
       app_settings: {
@@ -765,6 +740,22 @@ export type Database = {
       app_theme_mode_valid: { Args: { tokens: Json }; Returns: boolean }
       is_admin: { Args: never; Returns: boolean }
       is_staff: { Args: never; Returns: boolean }
+      search_products: {
+        Args: { max_results?: number; query: string }
+        Returns: {
+          currency: string
+          id: string
+          name: string
+          price: number
+          product_type: string
+          similarity: number
+          slug: string
+          status: Database["public"]["Enums"]["product_status"]
+          vendor: string
+        }[]
+      }
+      show_limit: { Args: never; Returns: number }
+      show_trgm: { Args: { "": string }; Returns: string[] }
     }
     Enums: {
       customer_state: "invited" | "enabled" | "disabled" | "declined"
@@ -906,9 +897,6 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
-  graphql_public: {
-    Enums: {},
-  },
   public: {
     Enums: {
       customer_state: ["invited", "enabled", "disabled", "declined"],

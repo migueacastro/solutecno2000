@@ -21,11 +21,15 @@ class ThemeStore {
 	}
 
 	/**
-	 * Semilla desde el load raíz (cookie leída en SSR). Solo la primera llamada
-	 * cuenta: tras montar, el único dueño del modo es el toggle del usuario.
+	 * Semilla desde el load raíz (cookie leída en SSR). En el SERVER el
+	 * singleton es compartido por todos los requests del proceso: aquí se
+	 * re-siembra SIEMPRE (el render es síncrono, sin carrera entre requests).
+	 * En el CLIENT solo la primera llamada cuenta: tras montar, el único
+	 * dueño del modo es el toggle del usuario.
 	 */
 	initialize(mode: ThemeMode): void {
-		if (this.#initialized) return;
+		const isClient = typeof window !== 'undefined';
+		if (isClient && this.#initialized) return;
 		this.#mode = mode;
 		this.#apply();
 		this.#initialized = true;
