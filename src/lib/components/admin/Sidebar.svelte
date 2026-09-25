@@ -5,7 +5,6 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { createSupabaseBrowserClient } from '$lib/supabase/client';
-	import { APP_NAME } from '$lib/config/app';
 	import { m } from '$lib/paraglide/messages.js';
 	import Icon from '$lib/components/ui/Icon.svelte';
 	import IconButton from '$lib/components/ui/IconButton.svelte';
@@ -21,19 +20,11 @@
 			display_name: string | null;
 			avatar_url: string | null;
 		};
-		/** Nombre de la marca (app_settings); si falta, cae a APP_NAME (env). */
-		appName?: string;
-		/** URL del logo de la marca en el bucket media; null = monograma. */
-		logoUrl?: string | null;
 		mobileOpen?: boolean;
 		onNavigate?: () => void;
 	};
 
-	let { profile, appName, logoUrl = null, mobileOpen = false, onNavigate }: Props = $props();
-
-	// Nombre resuelto con fallback interno: el componente sigue usable sin props.
-	const brand = $derived(appName?.trim() || APP_NAME);
-	const monogram = $derived(brand.slice(0, 1).toUpperCase());
+	let { profile, mobileOpen = false, onNavigate }: Props = $props();
 
 	// El colapso se lee y persiste solo en el cliente: localStorage no existe en SSR.
 	let collapsed = $state(false);
@@ -167,15 +158,8 @@
 	class="hidden shrink-0 flex-col bg-(--app-nav-bg) md:flex {collapsed ? 'w-[72px]' : 'w-[240px]'}"
 	style="transition: width 150ms cubic-bezier(0.25, 0.1, 0.25, 1)"
 >
-	<div class="flex items-center justify-between gap-2 p-3 {collapsed ? 'justify-center' : ''}">
-		{#if logoUrl}
-			<img src={logoUrl} alt={brand} class="h-7 shrink-0 rounded object-contain" />
-		{/if}
-		{#if !collapsed}
-			<span class="truncate text-[15px] font-semibold text-(--app-text)">{brand}</span>
-		{:else if !logoUrl}
-			<span class="text-[15px] font-bold text-(--app-primary)">{monogram}</span>
-		{/if}
+	<!-- La marca vive en la AdminTopbar: aquí queda solo el toggle de colapso. -->
+	<div class="flex items-center p-3 {collapsed ? 'justify-center' : ''}">
 		<IconButton
 			shape="square"
 			label={collapsed ? m.admin_sidebar_expand() : m.admin_sidebar_collapse()}
@@ -201,16 +185,11 @@
 			onclick={() => onNavigate?.()}
 		></button>
 		<aside class="fixed inset-y-0 left-0 z-50 flex w-[240px] flex-col bg-(--app-nav-bg)">
-			<div class="flex items-center gap-2 p-3">
-				{#if logoUrl}
-					<img src={logoUrl} alt={brand} class="h-7 shrink-0 rounded object-contain" />
-				{/if}
-				<span class="truncate text-[15px] font-semibold text-(--app-text)">{brand}</span>
+			<div class="flex items-center justify-end p-3">
 				<IconButton
 					shape="square"
 					label={m.admin_sidebar_menu_close()}
 					onclick={() => onNavigate?.()}
-					class="ml-auto"
 				>
 					<Icon paths="<path d='M18 6 6 18M6 6l12 12' />" size={20} />
 				</IconButton>

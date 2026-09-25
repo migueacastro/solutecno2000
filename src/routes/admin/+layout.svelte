@@ -152,12 +152,15 @@
 	<div
 		class="flex min-h-screen flex-col bg-(--app-bg) font-[Inter,system-ui,sans-serif] text-(--app-text)"
 	>
-		<AdminTopbar profile={data.profile} onMenuToggle={() => (drawerOpen = true)} />
+		<AdminTopbar
+			profile={data.profile}
+			appName={brand}
+			logoUrl={data.settings?.logoUrl ?? null}
+			onMenuToggle={() => (drawerOpen = true)}
+		/>
 		<div class="flex min-h-0 flex-1">
 			<Sidebar
 				profile={data.profile}
-				appName={brand}
-				logoUrl={data.settings?.logoUrl ?? null}
 				mobileOpen={drawerOpen}
 				onNavigate={() => (drawerOpen = false)}
 			/>
