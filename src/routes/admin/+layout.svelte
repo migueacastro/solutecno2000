@@ -3,9 +3,8 @@
 	import type { LayoutData } from './$types';
 	import type { Pathname } from '$app/types';
 	import { resolve } from '$app/paths';
-	import { goto, invalidateAll } from '$app/navigation';
-	import { onMount } from 'svelte';
-	import { createSupabaseBrowserClient } from '$lib/supabase/client';
+	import { goto } from '$app/navigation';
+	import { signOutBrowser } from '$lib/auth/sign-out';
 	import { resolveAppName } from '$lib/config/theme';
 	import { m } from '$lib/paraglide/messages.js';
 	import Sidebar from '$lib/components/admin/Sidebar.svelte';
@@ -17,9 +16,11 @@
 	/**
 	 * Shell del panel admin con el guard del +layout.ts. Estados en orden:
 	 * 1. Supabase sin configurar -> aviso centrado.
-	 * 2. Sin sesión -> tarjeta de login con Google.
-	 * 3. Sin perfil o rol customer -> tarjeta "sin permisos".
-	 * 4. staff/admin -> shell: sidebar + contenido + toasts.
+	 * 2. Sin perfil o rol customer -> tarjeta "sin permisos".
+	 * 3. staff/admin -> shell: sidebar + contenido + toasts.
+	 *
+	 * Sin sesión no llega aquí: el guard redirige a /login, y el intercambio
+	 * del código PKCE es server-side en /auth/callback (el único actor).
 	 */
 	let { data, children }: { data: LayoutData; children: Snippet } = $props();
 
@@ -29,56 +30,8 @@
 	// El drawer móvil vive aquí; Sidebar solo lo recibe como prop.
 	let drawerOpen = $state(false);
 
-	let loginError = $state('');
-	let signingIn = $state(false);
-
-	/**
-	 * Callback de OAuth: Google regresa a /admin?code=... y este módulo
-	 * intercambia el código PKCE por la sesión (el verificador vive en una
-	 * cookie de este mismo origen). Luego limpia la URL y refresca el router
-	 * para que el guard del servidor relea las cookies con la sesión nueva.
-	 */
-	onMount(() => {
-		const url = new URL(window.location.href);
-		const code = url.searchParams.get('code');
-		const oauthError = url.searchParams.get('error_description');
-
-		if (oauthError) {
-			loginError = m.admin_auth_oauth_rejected();
-			window.history.replaceState(null, '', url.pathname);
-		} else if (code) {
-			void exchangeCode(code, url.pathname);
-		}
-	});
-
-	async function exchangeCode(code: string, pathname: string): Promise<void> {
-		const { error } = await createSupabaseBrowserClient().auth.exchangeCodeForSession(code);
-		window.history.replaceState(null, '', pathname);
-
-		if (error) {
-			loginError = m.admin_auth_oauth_session();
-			return;
-		}
-
-		// Reejecuta los loads de servidor con las cookies de la sesión nueva.
-		await invalidateAll();
-	}
-
-	async function signIn(): Promise<void> {
-		loginError = '';
-		signingIn = true;
-		const { error } = await createSupabaseBrowserClient().auth.signInWithOAuth({
-			provider: 'google',
-			options: { redirectTo: `${window.location.origin}/admin` }
-		});
-		signingIn = false;
-		if (error) {
-			loginError = m.admin_auth_oauth_start();
-		}
-	}
-
 	async function signOut(): Promise<void> {
-		await createSupabaseBrowserClient().auth.signOut();
+		await signOutBrowser();
 		// invalidateAll reejecuta el +layout.ts para que el guard vea la sesión muerta.
 		await goto(resolve('/admin' as Pathname), { invalidateAll: true });
 	}
@@ -104,31 +57,6 @@
 			<p class="mt-2 text-[13px] leading-5 text-(--app-text-muted)">
 				{m.admin_auth_no_config_text()}
 			</p>
-		</Card>
-	</div>
-{:else if data.needsLogin}
-	<div
-		class="flex min-h-screen items-center justify-center bg-(--app-bg) p-4 font-[Inter,system-ui,sans-serif]"
-	>
-		<Card class="w-full max-w-sm p-8 text-center">
-			<h1 class="text-[20px] font-semibold text-(--app-text)">
-				{m.admin_auth_login_title({ name: brand })}
-			</h1>
-			<p class="mt-2 text-[13px] leading-5 text-(--app-text-muted)">
-				{m.admin_auth_login_text()}
-			</p>
-			<Button
-				variant="primary"
-				size="md"
-				class="mt-6 w-full text-[14px]"
-				onclick={signIn}
-				disabled={signingIn}
-			>
-				{m.admin_auth_login_button()}
-			</Button>
-			{#if loginError}
-				<p class="mt-3 text-[13px] text-(--app-tone-critical-text)">{loginError}</p>
-			{/if}
 		</Card>
 	</div>
 {:else if !data.profile || data.profile.role === 'customer'}

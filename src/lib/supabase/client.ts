@@ -6,9 +6,10 @@ import type { Database } from '$lib/database.types';
  * Cliente de Supabase para el navegador (SvelteKit client-side).
  * La anon key es pública por diseño: la seguridad la pone RLS en la base.
  *
- * detectSessionInUrl en false: el intercambio del código PKCE del callback
- * de OAuth lo hacemos de forma explícita en el layout del admin; dejarlo en
- * auto haría un segundo intercambio en carrera con el nuestro.
+ * detectSessionInUrl en false (INVARIANT, nunca activarlo): todo intercambio
+ * del código PKCE es explícito y server-side en /auth/callback — sirve tanto
+ * al email de verificación como al OAuth de Google. Dejarlo en auto haría un
+ * segundo intercambio client-side en carrera y el código es de un solo uso.
  */
 export const createSupabaseBrowserClient = () =>
 	createBrowserClient<Database>(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {

@@ -17,7 +17,8 @@
 		maxlength,
 		oninput,
 		onblur,
-		class: cls = ''
+		class: cls = '',
+		...rest
 	}: {
 		id: string;
 		label: string;
@@ -33,6 +34,8 @@
 		/** Passthrough de eventos (ej: autogenerar slug al salir del nombre). */
 		onblur?: (event: FocusEvent) => void;
 		class?: string;
+		/** Passthrough de atributos del input (autocomplete, required, ...). */
+		[key: string]: unknown;
 	} = $props();
 </script>
 
@@ -46,6 +49,7 @@
 		{maxlength}
 		{oninput}
 		{onblur}
+		{...rest}
 		bind:value
 		aria-invalid={error ? 'true' : undefined}
 		class="mt-1 w-full cursor-text rounded border border-(--app-border) bg-(--app-bg) px-3 py-2 text-[14px] text-(--app-text) outline-none focus:border-(--app-primary) {cls}"
